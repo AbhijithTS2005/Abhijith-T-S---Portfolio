@@ -1,5 +1,5 @@
-import { useState, useRef, type CSSProperties } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Award,
   Briefcase,
@@ -14,16 +14,8 @@ import {
   Sparkles
 } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
-
-interface Certificate {
-  id: string;
-  number: string;
-  title: string;
-  issuer: string;
-  category: 'data' | 'cloud' | 'cyber' | 'corporate';
-  file: string;
-  skills: string[];
-}
+import CertificateStack from '../components/CertificateStack';
+import { type Certificate } from '../components/CertificateCard';
 
 const CERTIFICATES: Certificate[] = [
   {
@@ -162,108 +154,6 @@ const CATEGORIES = [
   { id: 'cyber', label: 'Cybersecurity' },
 ];
 
-interface StackedCardProps {
-  cert: Certificate;
-  index: number;
-  totalCards: number;
-  onPreview: (cert: Certificate) => void;
-}
-
-function StackedCertificateCard({ cert, index, totalCards, onPreview }: StackedCardProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const targetScale = Math.max(0.88, 1 - (totalCards - 1 - index) * 0.02);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
-
-  const stackOffset = Math.min(index * 22, 160);
-  const stackStyle = { '--stack-offset': `${stackOffset}px` } as CSSProperties;
-
-  return (
-    <div ref={containerRef} className="h-[60vh] sm:h-[65vh] mb-4">
-      <motion.div
-        style={{ scale, ...stackStyle }}
-        className="sticky top-[calc(6rem_+_var(--stack-offset))] md:top-[calc(7.5rem_+_var(--stack-offset))] origin-top rounded-[32px] sm:rounded-[40px] border border-white/20 bg-[#121212] p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/80 flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-between"
-      >
-        {/* Left Side: Number, Title, Issuer & Skills */}
-        <div className="flex-1 flex flex-col justify-between h-full">
-          <div>
-            <div className="flex items-center justify-between gap-4 mb-4">
-              <span
-                className="text-white/20 font-black font-mono leading-none"
-                style={{ fontSize: 'clamp(2.5rem, 6vw, 80px)' }}
-              >
-                {cert.number}
-              </span>
-              <span className="text-xs font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30">
-                {cert.category}
-              </span>
-            </div>
-
-            <h3
-              className="text-xl sm:text-2xl md:text-3xl font-black uppercase text-white tracking-wide mb-2"
-            >
-              {cert.title}
-            </h3>
-
-            <div className="text-sm sm:text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 mb-6 flex items-center gap-2 font-mono">
-              <Building className="w-4 h-4 text-cyan-400" />
-              Issued by {cert.issuer}
-            </div>
-          </div>
-
-          <div>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {cert.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-xs font-mono px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-cyan-200"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-
-            <button
-              onClick={() => onPreview(cert)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg shadow-purple-900/30 hover:scale-105 transition-transform"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Inspect Certificate</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Right Side: Visual Certificate Card */}
-        <div
-          onClick={() => onPreview(cert)}
-          className="cursor-pointer group relative w-full md:w-[360px] lg:w-[420px] h-[200px] sm:h-[240px] rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-xl flex-shrink-0"
-        >
-          <img
-            src={cert.file}
-            alt={cert.title}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
-          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-cyan-300">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" /> Verified Credential
-            </span>
-            <span className="inline-flex items-center gap-1 text-white bg-white/15 px-2.5 py-1 rounded-full text-[11px]">
-              <Eye className="w-3.5 h-3.5" /> Expand
-            </span>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 export default function CertificatesSection() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'stack' | 'grid'>('stack');
@@ -283,8 +173,14 @@ export default function CertificatesSection() {
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-purple-900/10 blur-[160px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <FadeIn delay={0} y={30} className="text-center mb-16">
+        {/* Section Heading with subtle entrance animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center mb-16"
+        >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest mb-4">
             <Award className="w-3.5 h-3.5" />
             EXPERIENCE &amp; CREDENTIALS
@@ -300,7 +196,7 @@ export default function CertificatesSection() {
           <p className="mt-3 text-sm sm:text-base text-[#D7E2EA]/70 max-w-xl mx-auto font-light">
             Verified internship experience and industry credentials in Data Science, Analytics, Cloud, and Machine Learning.
           </p>
-        </FadeIn>
+        </motion.div>
 
         {/* Featured Internship Spotlight Card */}
         <FadeIn delay={0.1} y={25} className="mb-16">
@@ -392,7 +288,7 @@ export default function CertificatesSection() {
             })}
           </div>
 
-          {/* View Toggle */}
+          {/* View Mode Switcher */}
           <div className="inline-flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10">
             <button
               onClick={() => setViewMode('stack')}
@@ -403,7 +299,7 @@ export default function CertificatesSection() {
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>Stacked Scroll</span>
+              <span>Sticky Stack</span>
             </button>
             <button
               onClick={() => setViewMode('grid')}
@@ -414,29 +310,25 @@ export default function CertificatesSection() {
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Grid View</span>
+              <span>Grid</span>
             </button>
           </div>
         </div>
 
-        {/* 1. STACKED CARDS SCROLL EXPERIENCE (Top by Top Scroll) */}
+        {/* 1. PREMIUM STICKY STACKING SCROLL ANIMATION */}
         {viewMode === 'stack' ? (
-          <div className="relative pb-24">
+          <div className="relative">
             <div className="text-center text-xs font-mono text-cyan-300/80 mb-6 flex items-center justify-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>Scroll to stack certificates top-by-top</span>
+              <span>Scroll to smoothly stack certificates</span>
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
             </div>
 
-            {filteredCerts.map((cert, idx) => (
-              <StackedCertificateCard
-                key={cert.id}
-                cert={cert}
-                index={idx}
-                totalCards={filteredCerts.length}
-                onPreview={(c) => setPreviewCert(c)}
-              />
-            ))}
+            <CertificateStack
+              key={activeCategory}
+              certificates={filteredCerts}
+              onPreview={(c) => setPreviewCert(c)}
+            />
           </div>
         ) : (
           /* 2. COMPACT GRID VIEW */
