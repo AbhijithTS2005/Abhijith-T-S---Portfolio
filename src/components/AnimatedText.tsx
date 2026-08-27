@@ -44,8 +44,9 @@ export default function AnimatedText({ text, className = '', style }: AnimatedTe
   return (
     <p ref={ref} className={className} style={style}>
       {characters.map((char, i) => {
-        const start = i / characters.length;
-        const end = start + 1 / characters.length;
+        const charProgress = i / characters.length;
+        const start = Math.max(0, charProgress - 0.1);
+        const end = Math.min(1, charProgress + 0.05);
         return <AnimatedCharacter key={i} char={char} progress={scrollYProgress} range={[start, end]} />;
       })}
     </p>
