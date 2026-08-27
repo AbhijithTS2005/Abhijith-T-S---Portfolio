@@ -200,17 +200,17 @@ interface CardProps {
 }
 
 function CodePenStackedCard({ cert, index, onPreview }: CardProps) {
-  const stackOffset = Math.min(index * 22, 140);
+  const stackOffset = Math.min(index * 16, 120);
 
   return (
     <motion.div
       style={{
-        top: `calc(5.5rem + ${stackOffset}px)`,
+        top: `calc(4.5rem + ${stackOffset}px)`,
         zIndex: index + 10,
       }}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
-      className="sticky mb-16 sm:mb-24 md:mb-32 rounded-[32px] sm:rounded-[40px] border border-white/20 bg-[#121212]/95 backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/90 min-h-[460px] md:h-[60vh] items-center"
+      className="sticky mb-12 sm:mb-20 md:mb-28 rounded-[28px] sm:rounded-[36px] md:rounded-[40px] border border-white/20 bg-[#121212]/95 backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 p-5 sm:p-7 md:p-10 shadow-2xl shadow-black/90 min-h-[440px] md:h-[62vh] items-center overflow-hidden"
     >
       {/* c-card__description (Left Column) */}
       <div className="lg:col-span-7 flex flex-col justify-between h-full py-2">

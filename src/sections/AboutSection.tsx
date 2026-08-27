@@ -25,7 +25,7 @@ export default function AboutSection() {
         x={-80}
         y={0}
         duration={0.9}
-        className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] w-[120px] sm:w-[160px] md:w-[210px]"
+        className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] w-[75px] sm:w-[130px] md:w-[190px] opacity-40 sm:opacity-80 md:opacity-100 pointer-events-none"
       >
         <img src={MOON_ICON} alt="" className="w-full h-auto" />
       </FadeIn>
@@ -34,7 +34,7 @@ export default function AboutSection() {
         x={-80}
         y={0}
         duration={0.9}
-        className="absolute bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] w-[100px] sm:w-[140px] md:w-[180px]"
+        className="absolute bottom-[8%] left-[2%] sm:left-[5%] md:left-[8%] w-[65px] sm:w-[110px] md:w-[160px] opacity-40 sm:opacity-80 md:opacity-100 pointer-events-none"
       >
         <img src={OBJECT_3D} alt="" className="w-full h-auto" />
       </FadeIn>
@@ -43,7 +43,7 @@ export default function AboutSection() {
         x={80}
         y={0}
         duration={0.9}
-        className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] w-[120px] sm:w-[160px] md:w-[210px]"
+        className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] w-[75px] sm:w-[130px] md:w-[190px] opacity-40 sm:opacity-80 md:opacity-100 pointer-events-none"
       >
         <img src={LEGO_ICON} alt="" className="w-full h-auto" />
       </FadeIn>
@@ -52,7 +52,7 @@ export default function AboutSection() {
         x={80}
         y={0}
         duration={0.9}
-        className="absolute bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] w-[130px] sm:w-[170px] md:w-[220px]"
+        className="absolute bottom-[8%] right-[2%] sm:right-[5%] md:right-[8%] w-[80px] sm:w-[130px] md:w-[190px] opacity-40 sm:opacity-80 md:opacity-100 pointer-events-none"
       >
         <img src={GROUP_3D} alt="" className="w-full h-auto" />
       </FadeIn>
