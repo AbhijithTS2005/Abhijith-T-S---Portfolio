@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from 'framer-motion';
 import { useRef, type CSSProperties } from 'react';
 
-interface AnimatedTextProps {
+interface ScrollTextProps {
   text: string;
   className?: string;
   style?: CSSProperties;
@@ -21,7 +21,7 @@ function AnimatedCharacter({ char, progress, range }: AnimatedCharacterProps) {
     <span style={{ position: 'relative', display: 'inline-block' }}>
       {/* Invisible placeholder preserves natural text layout/wrapping */}
       <span style={{ opacity: 0 }}>{display}</span>
-      {/* Animated copy sits on top and fades in as the paragraph scrolls through view */}
+      {/* Animated copy on top */}
       <motion.span style={{ opacity, position: 'absolute', left: 0, top: 0 }}>
         {display}
       </motion.span>
@@ -29,11 +29,10 @@ function AnimatedCharacter({ char, progress, range }: AnimatedCharacterProps) {
   );
 }
 
-/**
- * Reveals `text` one character at a time as the paragraph scrolls through the viewport.
- */
-export default function AnimatedText({ text, className = '', style }: AnimatedTextProps) {
+export default function ScrollText({ text, className = '', style }: ScrollTextProps) {
   const ref = useRef<HTMLParagraphElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start 0.8', 'end 0.2'],
@@ -41,11 +40,20 @@ export default function AnimatedText({ text, className = '', style }: AnimatedTe
 
   const characters = text.split('');
 
+  if (shouldReduceMotion) {
+    return (
+      <p ref={ref} className={className} style={style}>
+        {text}
+      </p>
+    );
+  }
+
   return (
     <p ref={ref} className={className} style={style}>
       {characters.map((char, i) => {
-        const start = i / characters.length;
-        const end = start + 1 / characters.length;
+        const charProgress = i / characters.length;
+        const start = Math.max(0, charProgress - 0.1);
+        const end = Math.min(1, charProgress + 0.05);
         return <AnimatedCharacter key={i} char={char} progress={scrollYProgress} range={[start, end]} />;
       })}
     </p>

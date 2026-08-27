@@ -1,5 +1,4 @@
 import HeroSection from './sections/HeroSection';
-import AboutSection from './sections/AboutSection';
 import HowIThinkSection from './sections/HowIThinkSection';
 import SmarTravelSection from './sections/SmarTravelSection';
 import NextWaveSection from './sections/NextWaveSection';
@@ -17,10 +16,7 @@ function App() {
       {/* 1. Hero — Identity */}
       <HeroSection />
 
-      {/* 2. About Me */}
-      <AboutSection />
-
-      {/* 3. “How I Think” */}
+      {/* 2. “How I Think” */}
       <HowIThinkSection />
 
       {/* 3. Featured Project — SMARTRAVEL */}

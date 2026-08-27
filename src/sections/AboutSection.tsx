@@ -74,7 +74,7 @@ export default function AboutSection() {
             className="text-[#D7E2EA] font-medium text-center leading-relaxed max-w-[560px]"
             style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)' }}
           />
-          <FadeIn delay={0.3} y={20}>
+          <FadeIn delay={0.1}>
             <ContactButton />
           </FadeIn>
         </div>
