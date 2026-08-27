@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, type CSSProperties } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
   Award,
   Briefcase,
@@ -8,12 +8,16 @@ import {
   X,
   Calendar,
   Building,
-  ShieldCheck
+  ShieldCheck,
+  Layers,
+  LayoutGrid,
+  Sparkles
 } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
 
 interface Certificate {
   id: string;
+  number: string;
   title: string;
   issuer: string;
   category: 'data' | 'cloud' | 'cyber' | 'corporate';
@@ -24,6 +28,7 @@ interface Certificate {
 const CERTIFICATES: Certificate[] = [
   {
     id: 'internship-cert',
+    number: '01',
     title: 'Data Analyst Internship Certificate',
     issuer: 'SkillCraft Technology',
     category: 'data',
@@ -32,6 +37,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'google',
+    number: '02',
     title: 'Data & Analytics Foundations',
     issuer: 'Google',
     category: 'data',
@@ -40,6 +46,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'ibm',
+    number: '03',
     title: 'Data Science & Applied AI',
     issuer: 'IBM',
     category: 'data',
@@ -48,6 +55,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'deloitte',
+    number: '04',
     title: 'Technology & Analytics Simulation',
     issuer: 'Deloitte',
     category: 'corporate',
@@ -56,6 +64,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'tata',
+    number: '05',
     title: 'Data Visualisation: Empowering Business',
     issuer: 'Tata Group',
     category: 'data',
@@ -64,6 +73,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'aws',
+    number: '06',
     title: 'AWS Cloud Foundations',
     issuer: 'Amazon Web Services (AWS)',
     category: 'cloud',
@@ -72,6 +82,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'gcloud',
+    number: '07',
     title: 'Google Cloud Computing Foundations',
     issuer: 'Google Cloud',
     category: 'cloud',
@@ -80,6 +91,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'british-airways',
+    number: '08',
     title: 'Data Science Virtual Experience',
     issuer: 'British Airways',
     category: 'corporate',
@@ -88,6 +100,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'tata-cyber',
+    number: '09',
     title: 'Cybersecurity Analyst Simulation',
     issuer: 'Tata Group',
     category: 'cyber',
@@ -96,6 +109,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'mastercard',
+    number: '10',
     title: 'Cybersecurity Virtual Experience',
     issuer: 'Mastercard',
     category: 'cyber',
@@ -104,6 +118,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'learntube',
+    number: '11',
     title: 'Applied Analytics & Programming',
     issuer: 'LearnTube',
     category: 'data',
@@ -112,6 +127,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'kgisl',
+    number: '12',
     title: 'Technical Competency & Systems',
     issuer: 'KGISL',
     category: 'corporate',
@@ -120,6 +136,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'hacking',
+    number: '13',
     title: 'Ethical Hacking & Information Security',
     issuer: 'Security Foundations',
     category: 'cyber',
@@ -128,6 +145,7 @@ const CERTIFICATES: Certificate[] = [
   },
   {
     id: 'ncc',
+    number: '14',
     title: "National Cadet Corps 'B' Certificate",
     issuer: 'Ministry of Defence, Govt of India',
     category: 'corporate',
@@ -144,8 +162,111 @@ const CATEGORIES = [
   { id: 'cyber', label: 'Cybersecurity' },
 ];
 
+interface StackedCardProps {
+  cert: Certificate;
+  index: number;
+  totalCards: number;
+  onPreview: (cert: Certificate) => void;
+}
+
+function StackedCertificateCard({ cert, index, totalCards, onPreview }: StackedCardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const targetScale = Math.max(0.88, 1 - (totalCards - 1 - index) * 0.02);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+
+  const stackOffset = Math.min(index * 22, 160);
+  const stackStyle = { '--stack-offset': `${stackOffset}px` } as CSSProperties;
+
+  return (
+    <div ref={containerRef} className="h-[60vh] sm:h-[65vh] mb-4">
+      <motion.div
+        style={{ scale, ...stackStyle }}
+        className="sticky top-[calc(6rem_+_var(--stack-offset))] md:top-[calc(7.5rem_+_var(--stack-offset))] origin-top rounded-[32px] sm:rounded-[40px] border border-white/20 bg-[#121212] p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/80 flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-between"
+      >
+        {/* Left Side: Number, Title, Issuer & Skills */}
+        <div className="flex-1 flex flex-col justify-between h-full">
+          <div>
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <span
+                className="text-white/20 font-black font-mono leading-none"
+                style={{ fontSize: 'clamp(2.5rem, 6vw, 80px)' }}
+              >
+                {cert.number}
+              </span>
+              <span className="text-xs font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30">
+                {cert.category}
+              </span>
+            </div>
+
+            <h3
+              className="text-xl sm:text-2xl md:text-3xl font-black uppercase text-white tracking-wide mb-2"
+            >
+              {cert.title}
+            </h3>
+
+            <div className="text-sm sm:text-base font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 mb-6 flex items-center gap-2 font-mono">
+              <Building className="w-4 h-4 text-cyan-400" />
+              Issued by {cert.issuer}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {cert.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="text-xs font-mono px-3 py-1 rounded-full bg-white/[0.06] border border-white/10 text-cyan-200"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+
+            <button
+              onClick={() => onPreview(cert)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg shadow-purple-900/30 hover:scale-105 transition-transform"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Inspect Certificate</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Right Side: Visual Certificate Card */}
+        <div
+          onClick={() => onPreview(cert)}
+          className="cursor-pointer group relative w-full md:w-[360px] lg:w-[420px] h-[200px] sm:h-[240px] rounded-2xl overflow-hidden border border-white/15 bg-black/60 shadow-xl flex-shrink-0"
+        >
+          <img
+            src={cert.file}
+            alt={cert.title}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-cyan-300">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" /> Verified Credential
+            </span>
+            <span className="inline-flex items-center gap-1 text-white bg-white/15 px-2.5 py-1 rounded-full text-[11px]">
+              <Eye className="w-3.5 h-3.5" /> Expand
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function CertificatesSection() {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [viewMode, setViewMode] = useState<'stack' | 'grid'>('stack');
   const [previewCert, setPreviewCert] = useState<Certificate | null>(null);
 
   const filteredCerts = CERTIFICATES.filter((c) => {
@@ -226,14 +347,7 @@ export default function CertificatesSection() {
               <div className="lg:col-span-4 flex flex-col items-center lg:items-end justify-center">
                 <button
                   onClick={() =>
-                    setPreviewCert({
-                      id: 'internship-cert',
-                      title: 'Data Analyst Internship Certificate',
-                      issuer: 'SkillCraft Technology',
-                      category: 'data',
-                      file: '/Certificates/Internship.jpg',
-                      skills: ['Data Analytics', 'Python', 'EDA', 'Dashboard Visualization'],
-                    })
+                    setPreviewCert(CERTIFICATES[0])
                   }
                   className="group relative rounded-2xl overflow-hidden border-2 border-purple-400/40 p-1 bg-white/[0.05] hover:scale-105 transition-all duration-300 shadow-xl shadow-purple-950/30"
                 >
@@ -256,73 +370,123 @@ export default function CertificatesSection() {
           </div>
         </FadeIn>
 
-        {/* Certificate Filter Tabs */}
-        <FadeIn delay={0.15} y={15} className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          {CATEGORIES.map((cat) => {
-            const isSelected = activeCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider transition-all duration-200 ${
-                  isSelected
-                    ? 'bg-white text-black font-bold shadow-md shadow-white/10'
-                    : 'bg-white/[0.03] border border-white/10 text-[#D7E2EA]/70 hover:text-white hover:border-white/20'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </FadeIn>
+        {/* View Mode & Category Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+          {/* Category Filters */}
+          <div className="flex flex-wrap items-center gap-2">
+            {CATEGORIES.map((cat) => {
+              const isSelected = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-4 py-2 rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-white text-black font-bold shadow-md shadow-white/10'
+                      : 'bg-white/[0.03] border border-white/10 text-[#D7E2EA]/70 hover:text-white hover:border-white/20'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Certifications Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredCerts.map((cert, idx) => (
-            <FadeIn key={cert.id} delay={0.05 + (idx % 6) * 0.05} y={20}>
-              <div
-                onClick={() => setPreviewCert(cert)}
-                className="cursor-pointer group p-5 sm:p-6 rounded-3xl bg-white/[0.02] border border-white/10 hover:border-white/25 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between h-full"
-              >
-                <div>
-                  <div className="relative w-full h-[140px] rounded-2xl overflow-hidden mb-4 bg-black/40 border border-white/5">
-                    <img
-                      src={cert.file}
-                      alt={cert.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-cyan-300">
-                      <span>{cert.issuer}</span>
-                      <Eye className="w-3.5 h-3.5 text-white/80 group-hover:text-cyan-300 transition-colors" />
+          {/* View Toggle */}
+          <div className="inline-flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10">
+            <button
+              onClick={() => setViewMode('stack')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all ${
+                viewMode === 'stack'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'text-[#D7E2EA]/60 hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Stacked Scroll</span>
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'text-[#D7E2EA]/60 hover:text-white'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Grid View</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 1. STACKED CARDS SCROLL EXPERIENCE (Top by Top Scroll) */}
+        {viewMode === 'stack' ? (
+          <div className="relative pb-24">
+            <div className="text-center text-xs font-mono text-cyan-300/80 mb-6 flex items-center justify-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+              <span>Scroll to stack certificates top-by-top</span>
+              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            </div>
+
+            {filteredCerts.map((cert, idx) => (
+              <StackedCertificateCard
+                key={cert.id}
+                cert={cert}
+                index={idx}
+                totalCards={filteredCerts.length}
+                onPreview={(c) => setPreviewCert(c)}
+              />
+            ))}
+          </div>
+        ) : (
+          /* 2. COMPACT GRID VIEW */
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredCerts.map((cert, idx) => (
+              <FadeIn key={cert.id} delay={0.05 + (idx % 6) * 0.05} y={20}>
+                <div
+                  onClick={() => setPreviewCert(cert)}
+                  className="cursor-pointer group p-5 sm:p-6 rounded-3xl bg-white/[0.02] border border-white/10 hover:border-white/25 hover:bg-white/[0.05] transition-all duration-300 flex flex-col justify-between h-full"
+                >
+                  <div>
+                    <div className="relative w-full h-[140px] rounded-2xl overflow-hidden mb-4 bg-black/40 border border-white/5">
+                      <img
+                        src={cert.file}
+                        alt={cert.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-cyan-300">
+                        <span>{cert.issuer}</span>
+                        <Eye className="w-3.5 h-3.5 text-white/80 group-hover:text-cyan-300 transition-colors" />
+                      </div>
+                    </div>
+
+                    <h4 className="text-base sm:text-lg font-bold text-white mb-1.5 leading-snug">
+                      {cert.title}
+                    </h4>
+                    <span className="text-xs font-mono text-purple-300 block mb-3">
+                      Issued by {cert.issuer}
+                    </span>
+                  </div>
+
+                  <div>
+                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
+                      {cert.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.04] text-[#D7E2EA]/70"
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   </div>
-
-                  <h4 className="text-base sm:text-lg font-bold text-white mb-1.5 leading-snug">
-                    {cert.title}
-                  </h4>
-                  <span className="text-xs font-mono text-purple-300 block mb-3">
-                    Issued by {cert.issuer}
-                  </span>
                 </div>
-
-                <div>
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
-                    {cert.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/[0.04] text-[#D7E2EA]/70"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
+              </FadeIn>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Full Certificate Preview Modal */}
