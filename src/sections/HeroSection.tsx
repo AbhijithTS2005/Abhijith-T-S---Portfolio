@@ -9,18 +9,20 @@ const NAV_LINKS = [
   { label: 'How I Think', href: '#how-i-think' },
   { label: 'SmarTravel', href: '#smartravel' },
   { label: 'NextWave', href: '#nextwave' },
+  { label: 'Experience & Certs', href: '#experience' },
   { label: 'Skills', href: '#skills' },
   { label: 'Research', href: '#research' },
   { label: 'Contact', href: '#contact' },
 ];
 
 const ROLES = [
-  'DATA SCIENTIST',
+  'ASPIRING DATA SCIENTIST',
+  'BUSINESS ANALYST',
+  'DATA VISUALIZATION SPECIALIST',
   'DATA ANALYST',
-  'MACHINE LEARNING ENGINEER',
-  'DEVELOPER',
-  'RESEARCHER',
-  'BUILDER',
+  'MACHINE LEARNING PRACTITIONER',
+  'AI ENGINEERING ENTHUSIAST',
+  'DEVELOPER & RESEARCHER',
 ];
 const PORTRAIT_URL = '/profile.png';
 
@@ -57,12 +59,12 @@ export default function HeroSection() {
           <span>ABHIJITH T S</span>
         </a>
 
-        <div className="flex items-center gap-5 sm:gap-8">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-7">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-[#D7E2EA]/80 font-medium uppercase tracking-wider text-xs sm:text-sm md:text-[0.95rem] transition-all duration-200 hover:text-white hover:opacity-100"
+              className="text-[#D7E2EA]/80 font-medium uppercase tracking-wider text-xs sm:text-sm transition-all duration-200 hover:text-white hover:opacity-100"
             >
               {link.label}
             </a>
@@ -83,8 +85,13 @@ export default function HeroSection() {
           </div>
         </FadeIn>
 
-        {/* Big Name Typography */}
-        <div className="overflow-hidden w-full select-none">
+        {/* Big Name Typography with "HI, I AM" */}
+        <div className="overflow-hidden w-full select-none flex flex-col items-center">
+          <FadeIn delay={0.15} y={20}>
+            <span className="block text-sm sm:text-lg md:text-xl lg:text-2xl text-[#D7E2EA]/70 font-semibold tracking-[0.3em] uppercase mb-1">
+              Hi, I am
+            </span>
+          </FadeIn>
           <FadeIn
             as="h1"
             delay={0.2}
@@ -97,14 +104,7 @@ export default function HeroSection() {
 
         {/* Dynamic Tagline & Role Cycler */}
         <FadeIn delay={0.35} y={20} className="mt-2 sm:mt-3 flex flex-col items-center gap-2">
-          <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[#D7E2EA]/90 uppercase font-semibold tracking-[0.25em] flex items-center gap-2">
-            <span>DATA</span>
-            <span className="text-purple-400">×</span>
-            <span>CODE</span>
-            <span className="text-purple-400">×</span>
-            <span>INTELLIGENCE</span>
-          </p>
-
+          {/* Dynamic Role Transition */}
           <div className="h-8 sm:h-9 flex items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.span
@@ -119,6 +119,21 @@ export default function HeroSection() {
               </motion.span>
             </AnimatePresence>
           </div>
+
+          {/* Core Specialization Pillars */}
+          <p className="text-[11px] sm:text-xs md:text-sm text-[#D7E2EA]/90 uppercase font-semibold tracking-[0.18em] flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto px-4 leading-relaxed">
+            <span>Aspiring Data Scientist</span>
+            <span className="text-purple-400">•</span>
+            <span>Business Analyst</span>
+            <span className="text-purple-400">•</span>
+            <span>Data Visualization</span>
+            <span className="text-purple-400">•</span>
+            <span>Data Analytics</span>
+            <span className="text-purple-400">•</span>
+            <span>Machine Learning</span>
+            <span className="text-purple-400">•</span>
+            <span>AI Engineering</span>
+          </p>
 
           <p className="text-xs sm:text-sm md:text-base text-[#D7E2EA]/70 max-w-lg font-light tracking-wide mt-1">
             Building intelligent systems from data, ideas and curiosity.

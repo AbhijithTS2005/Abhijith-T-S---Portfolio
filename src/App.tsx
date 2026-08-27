@@ -2,6 +2,7 @@ import HeroSection from './sections/HeroSection';
 import HowIThinkSection from './sections/HowIThinkSection';
 import SmarTravelSection from './sections/SmarTravelSection';
 import NextWaveSection from './sections/NextWaveSection';
+import CertificatesSection from './sections/CertificatesSection';
 import SkillConstellationSection from './sections/SkillConstellationSection';
 import ResearchLabSection from './sections/ResearchLabSection';
 import AchievementsSection from './sections/AchievementsSection';
@@ -24,22 +25,25 @@ function App() {
       {/* 4. Josephites NextWave Foundation */}
       <NextWaveSection />
 
-      {/* 5. Skills — Interactive Technology Constellation */}
+      {/* 5. Experience & Certifications */}
+      <CertificatesSection />
+
+      {/* 6. Skills — Interactive Technology Constellation */}
       <SkillConstellationSection />
 
-      {/* 6. Research Lab */}
+      {/* 7. Research Lab */}
       <ResearchLabSection />
 
-      {/* 7. Achievements & Leadership */}
+      {/* 8. Achievements & Leadership */}
       <AchievementsSection />
 
-      {/* 8. Digital DNA */}
+      {/* 9. Digital DNA */}
       <DigitalDNASection />
 
-      {/* 9. Future */}
+      {/* 10. Future */}
       <FutureSection />
 
-      {/* 10. Final Section & Footer */}
+      {/* 11. Final Section & Footer */}
       <ContactFooterSection />
     </div>
   );
