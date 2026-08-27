@@ -14,7 +14,14 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-const ROLES = ['DATA SCIENTIST', 'DEVELOPER', 'RESEARCHER', 'BUILDER'];
+const ROLES = [
+  'DATA SCIENTIST',
+  'DATA ANALYST',
+  'MACHINE LEARNING ENGINEER',
+  'DEVELOPER',
+  'RESEARCHER',
+  'BUILDER',
+];
 const PORTRAIT_URL = '/profile.png';
 
 export default function HeroSection() {
