@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, type CSSProperties } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import {
   Award,
   Briefcase,
@@ -14,8 +14,18 @@ import {
   Sparkles
 } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
-import CertificateStack from '../components/CertificateStack';
-import { type Certificate } from '../components/CertificateCard';
+
+interface Certificate {
+  id: string;
+  number: string;
+  title: string;
+  issuer: string;
+  tagline: string;
+  category: 'data' | 'cloud' | 'cyber' | 'corporate';
+  file: string;
+  excerpt: string;
+  skills: string[];
+}
 
 const CERTIFICATES: Certificate[] = [
   {
@@ -23,126 +33,154 @@ const CERTIFICATES: Certificate[] = [
     number: '01',
     title: 'Data Analyst Internship Certificate',
     issuer: 'SkillCraft Technology',
+    tagline: 'Professional Experience • Remote',
     category: 'data',
     file: '/Certificates/Internship.jpg',
-    skills: ['Data Analytics', 'Python', 'EDA', 'Dashboard Visualization'],
+    excerpt: 'Hands-on enterprise data analytics internship executing EDA pipelines, statistical modeling, and interactive decision dashboards in Python.',
+    skills: ['Data Analytics', 'Python & Pandas', 'EDA Pipelines', 'Business Dashboards'],
   },
   {
     id: 'google',
     number: '02',
     title: 'Data & Analytics Foundations',
     issuer: 'Google',
+    tagline: 'Google Professional Certification',
     category: 'data',
     file: '/Certificates/Google.jpeg',
-    skills: ['Data Analysis', 'Data Cleaning', 'Spreadsheets', 'SQL'],
+    excerpt: 'Comprehensive data analysis methodology, data cleaning practices, spreadsheet analytics, and SQL query optimization.',
+    skills: ['Data Analysis', 'Data Cleaning', 'Spreadsheets', 'SQL Querying'],
   },
   {
     id: 'ibm',
     number: '03',
     title: 'Data Science & Applied AI',
     issuer: 'IBM',
+    tagline: 'IBM Applied Data Science',
     category: 'data',
     file: '/Certificates/IBM.jpeg',
-    skills: ['Python', 'Data Science Methodology', 'Jupyter', 'Algorithms'],
+    excerpt: 'Data science workflow execution, Jupyter notebook workflows, Python statistical programming, and machine learning foundation algorithms.',
+    skills: ['Python', 'Data Science Methodology', 'Jupyter', 'ML Foundations'],
   },
   {
     id: 'deloitte',
     number: '04',
     title: 'Technology & Analytics Simulation',
     issuer: 'Deloitte',
+    tagline: 'Deloitte Virtual Internship',
     category: 'corporate',
     file: '/Certificates/Deloitte.png',
-    skills: ['Business Analytics', 'Forensic Tech', 'Client Delivery'],
+    excerpt: 'Enterprise technology consulting simulation focusing on business analytics, forensic technology investigations, and client data delivery.',
+    skills: ['Business Analytics', 'Forensic Tech', 'Client Delivery', 'Strategy'],
   },
   {
     id: 'tata',
     number: '05',
     title: 'Data Visualisation: Empowering Business',
     issuer: 'Tata Group',
+    tagline: 'Tata Group Analytics Experience',
     category: 'data',
     file: '/Certificates/TATA.jpg',
-    skills: ['Data Visualization', 'Executive Dashboards', 'Business Insights'],
+    excerpt: 'Executive dashboard design, KPI visualization frameworks, and translating raw multi-dimensional datasets into actionable executive insights.',
+    skills: ['Data Visualization', 'Executive Dashboards', 'Business Insights', 'Storytelling'],
   },
   {
     id: 'aws',
     number: '06',
     title: 'AWS Cloud Foundations',
     issuer: 'Amazon Web Services (AWS)',
+    tagline: 'AWS Cloud Architecture',
     category: 'cloud',
     file: '/Certificates/AWS.jpg',
-    skills: ['Cloud Architecture', 'AWS S3', 'EC2', 'Security & IAM'],
+    excerpt: 'Foundational cloud computing principles, AWS infrastructure services (EC2, S3, IAM), cloud security, and distributed architecture.',
+    skills: ['Cloud Architecture', 'AWS S3', 'EC2 Compute', 'IAM Security'],
   },
   {
     id: 'gcloud',
     number: '07',
     title: 'Google Cloud Computing Foundations',
     issuer: 'Google Cloud',
+    tagline: 'Google Cloud Platform (GCP)',
     category: 'cloud',
     file: '/Certificates/GCloud.jpg',
-    skills: ['GCP Infrastructure', 'BigQuery', 'Cloud Storage'],
+    excerpt: 'GCP core infrastructure, BigQuery cloud data warehousing, Google Cloud Storage architecture, and cloud analytics pipeline orchestration.',
+    skills: ['GCP Infrastructure', 'BigQuery', 'Cloud Storage', 'Cloud Architecture'],
   },
   {
     id: 'british-airways',
     number: '08',
     title: 'Data Science Virtual Experience',
     issuer: 'British Airways',
+    tagline: 'Aviation Customer Analytics',
     category: 'corporate',
     file: '/Certificates/British Airways.jpg',
-    skills: ['Customer Analytics', 'Web Scraping', 'Predictive Modeling'],
+    excerpt: 'Customer behavior analytics, web scraping airline customer sentiment, and predictive customer retention modeling with machine learning.',
+    skills: ['Customer Analytics', 'Web Scraping', 'Predictive Modeling', 'NLP'],
   },
   {
     id: 'tata-cyber',
     number: '09',
     title: 'Cybersecurity Analyst Simulation',
     issuer: 'Tata Group',
+    tagline: 'Cybersecurity Defense',
     category: 'cyber',
     file: '/Certificates/Tata Cybersecurity.jpg',
-    skills: ['IAM', 'Threat Modeling', 'Security Governance'],
+    excerpt: 'IAM access control architecture, threat landscape modeling, incident vulnerability triage, and enterprise security governance frameworks.',
+    skills: ['IAM', 'Threat Modeling', 'Security Governance', 'Risk Assessment'],
   },
   {
     id: 'mastercard',
     number: '10',
     title: 'Cybersecurity Virtual Experience',
     issuer: 'Mastercard',
+    tagline: 'Financial Security Systems',
     category: 'cyber',
     file: '/Certificates/Mastercard.jpg',
-    skills: ['Security Analysis', 'Risk Assessment', 'Security Design'],
+    excerpt: 'Financial payment infrastructure security analysis, security design assessment, phishing defense, and risk mitigation methodologies.',
+    skills: ['Security Analysis', 'Risk Assessment', 'Payment Security', 'Threat Analysis'],
   },
   {
     id: 'learntube',
     number: '11',
     title: 'Applied Analytics & Programming',
     issuer: 'LearnTube',
+    tagline: 'Programming & Data Structures',
     category: 'data',
     file: '/Certificates/LearnTube.jpg',
-    skills: ['Data Structures', 'Analytics', 'Python'],
+    excerpt: 'Core computer science data structures, algorithmic efficiency, Python data manipulation, and practical analytics problem solving.',
+    skills: ['Data Structures', 'Analytics', 'Python Programming', 'Algorithms'],
   },
   {
     id: 'kgisl',
     number: '12',
     title: 'Technical Competency & Systems',
     issuer: 'KGISL',
+    tagline: 'Software & Systems Assessment',
     category: 'corporate',
     file: '/Certificates/KGISL.jpg',
-    skills: ['Software Engineering', 'Applied Tech'],
+    excerpt: 'Applied software engineering paradigms, technical system design evaluation, database management, and enterprise programming competencies.',
+    skills: ['Software Engineering', 'System Design', 'Database Systems', 'Applied Tech'],
   },
   {
     id: 'hacking',
     number: '13',
     title: 'Ethical Hacking & Information Security',
     issuer: 'Security Foundations',
+    tagline: 'Network & System Defense',
     category: 'cyber',
     file: '/Certificates/Hacking.jpg',
-    skills: ['Network Security', 'Vulnerability Assessment'],
+    excerpt: 'Network penetration testing fundamentals, vulnerability scanning, security compliance, and proactive information protection strategies.',
+    skills: ['Network Security', 'Vulnerability Assessment', 'Ethical Hacking', 'InfoSec'],
   },
   {
     id: 'ncc',
     number: '14',
     title: "National Cadet Corps 'B' Certificate",
     issuer: 'Ministry of Defence, Govt of India',
+    tagline: 'Discipline & Leadership',
     category: 'corporate',
     file: '/Certificates/NCC B.jpg',
-    skills: ['Leadership', 'Discipline', 'Team Coordination'],
+    excerpt: 'Leadership development, high-pressure team coordination, strategic discipline, and national service operational training.',
+    skills: ['Leadership', 'Discipline', 'Team Coordination', 'Operational Strategy'],
   },
 ];
 
@@ -153,6 +191,155 @@ const CATEGORIES = [
   { id: 'corporate', label: 'Industry & Leadership' },
   { id: 'cyber', label: 'Cybersecurity' },
 ];
+
+interface CardProps {
+  cert: Certificate;
+  index: number;
+  totalCards: number;
+  onPreview: (cert: Certificate) => void;
+}
+
+function CodePenStackedCard({ cert, index, totalCards, onPreview }: CardProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Scale down earlier cards subtly as subsequent cards pin over them
+  const targetScale = Math.max(0.88, 1 - (totalCards - 1 - index) * 0.022);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
+
+  // Stack offset so card headers subtly layer
+  const stackOffset = Math.min(index * 22, 140);
+  const stackStyle = { '--stack-offset': `${stackOffset}px` } as CSSProperties;
+
+  if (shouldReduceMotion) {
+    return (
+      <div className="w-full mb-8">
+        <div className="rounded-[32px] sm:rounded-[40px] border border-white/20 bg-[#121212] grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 sm:p-10 shadow-2xl">
+          <div className="flex flex-col justify-center">
+            <span className="text-xs font-mono uppercase tracking-widest text-purple-300 mb-2">
+              {cert.tagline}
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-black uppercase text-white mb-2">{cert.title}</h3>
+            <p className="text-sm text-[#D7E2EA]/70 mb-4">{cert.excerpt}</p>
+            <button
+              onClick={() => onPreview(cert)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-mono uppercase text-white bg-purple-600 w-max"
+            >
+              <Eye className="w-4 h-4" /> View Certificate
+            </button>
+          </div>
+          <div className="relative rounded-2xl overflow-hidden bg-black/50 h-[240px]">
+            <img src={cert.file} alt={cert.title} className="w-full h-full object-cover" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className="h-[75vh] sm:h-[80vh] mb-4">
+      {/* Pinned Card Container */}
+      <motion.div
+        style={{ scale, ...stackStyle }}
+        className="sticky top-[calc(5.5rem_+_var(--stack-offset))] md:top-[calc(6.5rem_+_var(--stack-offset))] origin-top rounded-[32px] sm:rounded-[40px] border border-white/20 bg-[#121212]/95 backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 sm:p-8 md:p-10 shadow-2xl shadow-black/85 min-h-[460px] md:h-[62vh] items-center"
+      >
+        {/* c-card__description (Left Column) */}
+        <div className="lg:col-span-7 flex flex-col justify-between h-full py-2">
+          <div>
+            {/* Tagline / Issuer */}
+            <div className="flex items-center justify-between gap-4 mb-3">
+              <span className="text-xs sm:text-sm font-mono uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 font-semibold flex items-center gap-2">
+                <Building className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                {cert.tagline}
+              </span>
+              <span className="text-xs font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-white/[0.06] text-purple-300 border border-purple-400/30">
+                {cert.category}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3
+              className="text-xl sm:text-2xl md:text-3xl font-black uppercase text-white tracking-wide mb-3 leading-tight"
+            >
+              {cert.title}
+            </h3>
+
+            {/* Excerpt / Summary */}
+            <p className="text-xs sm:text-sm md:text-base text-[#D7E2EA]/80 font-light leading-relaxed mb-4">
+              {cert.excerpt}
+            </p>
+          </div>
+
+          <div>
+            {/* Skills Badges */}
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6">
+              {cert.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="text-[11px] sm:text-xs font-mono px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-cyan-200"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-3">
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => onPreview(cert)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-purple-600 to-indigo-600 shadow-lg shadow-purple-900/30 transition-transform"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Inspect Certificate</span>
+              </motion.button>
+
+              <motion.a
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                href={cert.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full text-xs sm:text-sm font-mono text-[#D7E2EA]/80 hover:text-white bg-white/[0.05] border border-white/15 hover:bg-white/[0.1] transition-colors"
+              >
+                <span>Full Resolution</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </motion.a>
+            </div>
+          </div>
+        </div>
+
+        {/* c-card__figure (Right Column) */}
+        <div
+          onClick={() => onPreview(cert)}
+          className="lg:col-span-5 cursor-pointer group relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-full rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 bg-black/60 shadow-xl flex-shrink-0"
+        >
+          <img
+            src={cert.file}
+            alt={cert.title}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-75 group-hover:opacity-50 transition-opacity" />
+          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-cyan-300">
+            <span className="flex items-center gap-1.5 text-[11px] sm:text-xs">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Verified Credential
+            </span>
+            <span className="inline-flex items-center gap-1 text-white bg-white/15 px-2.5 py-1 rounded-full text-[11px]">
+              <Eye className="w-3.5 h-3.5" /> Expand
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function CertificatesSection() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -173,14 +360,8 @@ export default function CertificatesSection() {
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-purple-900/10 blur-[160px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-6xl mx-auto">
-        {/* Section Heading with subtle entrance animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-center mb-16"
-        >
+        {/* Section Header */}
+        <FadeIn delay={0} y={30} className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-widest mb-4">
             <Award className="w-3.5 h-3.5" />
             EXPERIENCE &amp; CREDENTIALS
@@ -196,7 +377,7 @@ export default function CertificatesSection() {
           <p className="mt-3 text-sm sm:text-base text-[#D7E2EA]/70 max-w-xl mx-auto font-light">
             Verified internship experience and industry credentials in Data Science, Analytics, Cloud, and Machine Learning.
           </p>
-        </motion.div>
+        </FadeIn>
 
         {/* Featured Internship Spotlight Card */}
         <FadeIn delay={0.1} y={25} className="mb-16">
@@ -288,7 +469,7 @@ export default function CertificatesSection() {
             })}
           </div>
 
-          {/* View Mode Switcher */}
+          {/* View Toggle */}
           <div className="inline-flex items-center p-1 rounded-full bg-white/[0.04] border border-white/10">
             <button
               onClick={() => setViewMode('stack')}
@@ -299,7 +480,7 @@ export default function CertificatesSection() {
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>Sticky Stack</span>
+              <span>Stacked Cards</span>
             </button>
             <button
               onClick={() => setViewMode('grid')}
@@ -310,25 +491,31 @@ export default function CertificatesSection() {
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Grid</span>
+              <span>Grid View</span>
             </button>
           </div>
         </div>
 
-        {/* 1. PREMIUM STICKY STACKING SCROLL ANIMATION */}
+        {/* 1. CODEPEN-STYLE STACKED CARDS SCROLL SYSTEM */}
         {viewMode === 'stack' ? (
-          <div className="relative">
+          <div className="relative pb-24">
             <div className="text-center text-xs font-mono text-cyan-300/80 mb-6 flex items-center justify-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>Scroll to smoothly stack certificates</span>
+              <span>Scroll to smoothly stack cards top-by-top</span>
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
             </div>
 
-            <CertificateStack
-              key={activeCategory}
-              certificates={filteredCerts}
-              onPreview={(c) => setPreviewCert(c)}
-            />
+            <div className="l-cards flex flex-col">
+              {filteredCerts.map((cert, idx) => (
+                <CodePenStackedCard
+                  key={cert.id}
+                  cert={cert}
+                  index={idx}
+                  totalCards={filteredCerts.length}
+                  onPreview={(c) => setPreviewCert(c)}
+                />
+              ))}
+            </div>
           </div>
         ) : (
           /* 2. COMPACT GRID VIEW */
