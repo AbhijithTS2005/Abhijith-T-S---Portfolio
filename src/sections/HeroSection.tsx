@@ -71,12 +71,12 @@ export default function HeroSection() {
           ))}
 
           <a
-            href="/Abhijith_TS_ATS_Resume.pdf"
-            download="Abhijith_TS_ATS_Resume.pdf"
+            href="/Abhijith_TS_Resume.pdf"
+            download="Abhijith_TS_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-white transition-all duration-200"
-            title="Download ATS-Friendly Resume"
+            title="Download Resume"
           >
             <FileDown className="w-3.5 h-3.5" />
             <span>Resume</span>
@@ -192,14 +192,14 @@ export default function HeroSection() {
           </a>
 
           <a
-            href="/Abhijith_TS_ATS_Resume.pdf"
-            download="Abhijith_TS_ATS_Resume.pdf"
+            href="/Abhijith_TS_Resume.pdf"
+            download="Abhijith_TS_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-cyan-300 bg-cyan-950/40 border border-cyan-500/40 hover:bg-cyan-900/50 hover:border-cyan-400 hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
           >
             <Download className="w-4 h-4 text-cyan-400" />
-            Resume (ATS)
+            Download Resume
           </a>
 
           <a

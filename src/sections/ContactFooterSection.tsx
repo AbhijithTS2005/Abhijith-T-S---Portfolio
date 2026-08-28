@@ -141,16 +141,16 @@ export default function ContactFooterSection() {
             <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
           </a>
 
-          {/* Download ATS Resume */}
+          {/* Download Resume */}
           <a
-            href="/Abhijith_TS_ATS_Resume.pdf"
-            download="Abhijith_TS_ATS_Resume.pdf"
+            href="/Abhijith_TS_Resume.pdf"
+            download="Abhijith_TS_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-medium uppercase tracking-widest text-cyan-300 bg-cyan-950/30 border border-cyan-500/30 hover:bg-cyan-900/40 hover:border-cyan-400 hover:text-white transition-all duration-200 hover:scale-105"
           >
             <FileDown className="w-4 h-4 text-cyan-400" />
-            <span>Download ATS Resume</span>
+            <span>Download Resume</span>
             <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
           </a>
         </FadeIn>
