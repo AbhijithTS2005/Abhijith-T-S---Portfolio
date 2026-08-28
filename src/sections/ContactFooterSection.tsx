@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail, Phone, Github, Linkedin, ArrowUpRight, Copy, Check, Sparkles, MessageCircle } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, ArrowUpRight, Copy, Check, Sparkles, MessageCircle, FileDown } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
 
 export default function ContactFooterSection() {
@@ -138,6 +138,19 @@ export default function ContactFooterSection() {
           >
             <Linkedin className="w-4 h-4 text-cyan-400" />
             <span>LinkedIn</span>
+            <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
+          </a>
+
+          {/* Download ATS Resume */}
+          <a
+            href="/Abhijith_TS_ATS_Resume.pdf"
+            download="Abhijith_TS_ATS_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full text-xs sm:text-sm font-medium uppercase tracking-widest text-cyan-300 bg-cyan-950/30 border border-cyan-500/30 hover:bg-cyan-900/40 hover:border-cyan-400 hover:text-white transition-all duration-200 hover:scale-105"
+          >
+            <FileDown className="w-4 h-4 text-cyan-400" />
+            <span>Download ATS Resume</span>
             <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
           </a>
         </FadeIn>

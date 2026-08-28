@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   Layers,
   LayoutGrid,
-  Sparkles
+  Sparkles,
+  FileDown
 } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
 
@@ -340,6 +341,19 @@ export default function CertificatesSection() {
           <p className="mt-3 text-sm sm:text-base text-[#D7E2EA]/70 max-w-xl mx-auto font-light">
             Verified internship experience and industry credentials in Data Science, Analytics, Cloud, and Machine Learning.
           </p>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="/Abhijith_TS_ATS_Resume.pdf"
+              download="Abhijith_TS_ATS_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg shadow-cyan-950/40"
+            >
+              <FileDown className="w-4 h-4 text-cyan-400" />
+              <span>Download Official ATS Resume (PDF)</span>
+            </a>
+          </div>
         </FadeIn>
 
         {/* Featured Internship Spotlight Card */}

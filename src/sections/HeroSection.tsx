@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Sparkles, FileDown, Download } from 'lucide-react';
 import FadeIn from '../components/FadeIn';
 import Magnet from '../components/Magnet';
 import ParticleCanvas from '../components/ParticleCanvas';
@@ -59,7 +59,7 @@ export default function HeroSection() {
           <span>ABHIJITH T S</span>
         </a>
 
-        <div className="flex flex-wrap items-center gap-4 sm:gap-7">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
@@ -69,6 +69,18 @@ export default function HeroSection() {
               {link.label}
             </a>
           ))}
+
+          <a
+            href="/Abhijith_TS_ATS_Resume.pdf"
+            download="Abhijith_TS_ATS_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-white transition-all duration-200"
+            title="Download ATS-Friendly Resume"
+          >
+            <FileDown className="w-3.5 h-3.5" />
+            <span>Resume</span>
+          </a>
         </div>
       </FadeIn>
 
@@ -164,10 +176,10 @@ export default function HeroSection() {
         </div>
 
         {/* Call to action buttons */}
-        <FadeIn delay={0.6} y={20} className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-1">
+        <FadeIn delay={0.6} y={20} className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-1">
           <a
             href="#smartravel"
-            className="inline-flex items-center gap-2 rounded-full px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-white transition-transform duration-200 hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-white transition-transform duration-200 hover:scale-105 active:scale-95"
             style={{
               background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)',
               boxShadow: '0px 4px 14px rgba(181, 1, 167, 0.35), 4px 4px 12px #7721B1 inset',
@@ -180,8 +192,19 @@ export default function HeroSection() {
           </a>
 
           <a
+            href="/Abhijith_TS_ATS_Resume.pdf"
+            download="Abhijith_TS_ATS_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold uppercase tracking-widest text-cyan-300 bg-cyan-950/40 border border-cyan-500/40 hover:bg-cyan-900/50 hover:border-cyan-400 hover:text-white transition-all duration-200 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(6,182,212,0.15)]"
+          >
+            <Download className="w-4 h-4 text-cyan-400" />
+            Resume (ATS)
+          </a>
+
+          <a
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-full px-7 py-3 sm:px-9 sm:py-3.5 text-xs sm:text-sm font-medium uppercase tracking-widest text-[#D7E2EA] bg-white/[0.06] border border-white/20 hover:bg-white/[0.12] hover:text-white transition-all duration-200"
+            className="inline-flex items-center gap-2 rounded-full px-6 sm:px-8 py-3 sm:py-3.5 text-xs sm:text-sm font-medium uppercase tracking-widest text-[#D7E2EA] bg-white/[0.06] border border-white/20 hover:bg-white/[0.12] hover:text-white transition-all duration-200 hover:scale-105 active:scale-95"
           >
             Let&apos;s Connect
             <ArrowUpRight className="w-4 h-4" />
